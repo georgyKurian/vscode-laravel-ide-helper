@@ -1,10 +1,10 @@
 {
-	"name": "helloworld-sample",
-	"displayName": "helloworld-sample",
-	"description": "HelloWorld example for VS Code",
+	"name": "laravel-ide-helper",
+	"displayName": "Laravel Ide Helper",
+	"description": "Plugin to run Laravel Ide helper commands for better code suggestion",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
-	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-sample",
+	"publisher": "georgyKurian",
+	"repository": "https://github.com/georgyKurian/vscode-laravel-ide-helper",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
