@@ -9,19 +9,36 @@
 		"vscode": "^1.32.0"
 	},
 	"categories": [
-		"Other"
+		"Programming Languages",
+		"Linters"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onCommand:extension.laravelHelperGenerate",
+		"workspaceContains:**/composer.json"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "extension.laravelHelperGenerate",
+				"title": "Laravel Helper: Generate"
 			}
-		]
+		],
+		"configuration": {
+			"title" : "Laravel Helper",
+			"properties": {
+				"helper.facades": {
+					"type": "boolean",
+					"default": true,
+				  	"description": "Generates PHPDoc for Laravel Facades"
+				},
+				"helper.models": {
+					"type": "boolean",
+					"default": true,
+				  	"description": "Generates PHPDoc for Models"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
