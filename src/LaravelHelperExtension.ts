@@ -50,8 +50,6 @@ class LaravelHelperExtension {
       this.showOutputMessage(`[CMD] ${cfg.cmd}`);
 
       const execOptions = this._getExecOption(document);
-      console.log(execOptions);
-      //const child = exec(cfg.cmd);
 
       const child = exec(cfg.cmd, execOptions, (error, stdout, stderr) => {
         if (!cfg.isAsync) {
@@ -125,6 +123,7 @@ class LaravelHelperExtension {
     return {
       cmd: "php artisan ide-helper:generate",
       isAsync: false,
+      match: "app",
     };
   }
 
@@ -132,6 +131,7 @@ class LaravelHelperExtension {
     return {
       cmd: "php artisan ide-helper:models -n",
       isAsync: false,
+      match: "app(\\/models)?\\/(\\w|_)+.php$",
     };
   }
 
@@ -164,10 +164,12 @@ class LaravelHelperExtension {
       return;
     }
 
+    const parsedPath = document.fileName.replace(/\\/g,'/');
+
     const match = (pattern: string) =>
       pattern &&
       pattern.length > 0 &&
-      new RegExp(pattern).test(document.fileName);
+      new RegExp(pattern,"i").test(parsedPath);
 
     const commandConfigs = this.commands.filter((cfg) => {
       const matchPattern = cfg.match || ".*?";
@@ -224,11 +226,6 @@ class LaravelHelperExtension {
       );
       cmdStr = cmdStr.replace(/\${relativeFile}/g, relativeFile);
       cmdStr = cmdStr.replace(/\${cwd}/g, process.cwd());
-
-      // replace environment variables ${env.Name}
-      /* cmdStr = cmdStr.replace(/\${env\.([^}]+)}/g, (sub: string, ...args: any[]) => {
-                return process.env[envName];
-			}); */
 
       commands.push({
         cmd: cmdStr,
