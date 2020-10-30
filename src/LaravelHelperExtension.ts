@@ -153,8 +153,16 @@ class LaravelHelperExtension {
     return vscode.window.setStatusBarMessage(message);
   }
 
-  public runCommands(document: vscode.TextDocument): void {
-    this.showOutputMessage("runCommand");
+  /* public runHelper() {
+    this._runCommands(
+      this.commands.map((commandObject) => ({
+        cmd: commandObject.cmd,
+        isAsync: !!commandObject.isAsync,
+      }))
+    );
+  } */
+
+  public onFileSave(document: vscode.TextDocument): void {
     if (this.autoClearConsole) {
       this._outputChannel.clear();
     }
@@ -164,12 +172,12 @@ class LaravelHelperExtension {
       return;
     }
 
-    const parsedPath = document.fileName.replace(/\\/g,'/');
+    const parsedPath = document.fileName.replace(/\\/g, "/");
 
     const match = (pattern: string) =>
       pattern &&
       pattern.length > 0 &&
-      new RegExp(pattern,"i").test(parsedPath);
+      new RegExp(pattern, "i").test(parsedPath);
 
     const commandConfigs = this.commands.filter((cfg) => {
       const matchPattern = cfg.match || ".*?";
@@ -188,8 +196,6 @@ class LaravelHelperExtension {
     if (commandConfigs.length === 0) {
       return;
     }
-
-    this.showStatusMessage("Running on save commands...");
 
     // build our commands by replacing parameters with values
     const commands: Array<ICommand> = [];
