@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import * as path from "path";
 import { exec } from "child_process";
+import FilePath from "./FilePath";
 
 interface IConfig {
   isFacade: boolean;
@@ -9,6 +9,7 @@ interface IConfig {
 }
 
 interface ICommand {
+  isEnabled: boolean;
   match?: string;
   notMatch?: string;
   cmd: string;
@@ -42,36 +43,39 @@ class LaravelHelperExtension {
 
   /** Recursive call to run commands. */
   private _runCommands(
-    commands: Array<ICommand>,
+    commandList: Array<ICommand>,
     document: vscode.TextDocument
   ): void {
-    const cfg = commands.shift();
-    if (cfg) {
-      this.showOutputMessage(`[CMD] ${cfg.cmd}`);
+    const commandObject = commandList.shift();
 
-      const execOptions = this._getExecOption(document);
+    if (commandObject) {
+      this.showOutputMessage(`[CMD] ${commandObject.cmd}`);
 
-      const child = exec(cfg.cmd, execOptions, (error, stdout, stderr) => {
-        if (!cfg.isAsync) {
-          this._runCommands(commands, document);
+      const child = exec(
+        commandObject.cmd,
+        this._getExecOption(document),
+        (error, stdout, stderr) => {
+          if (!commandObject.isAsync) {
+            this._runCommands(commandList, document);
+          }
+          if (error) {
+            console.error(`ERROR: ${error}`);
+            return;
+          }
+          if (stdout) {
+            console.log(`${stdout}`);
+            this._outputChannel.append(`STDOUT: ${stdout}`);
+          }
+          if (stderr) {
+            console.error(`ERROR: ${stderr}`);
+            this._outputChannel.append(`ERROR: ${stderr}`);
+          }
         }
-        if (error) {
-          console.error(`ERROR: ${error}`);
-          return;
-        }
-        if (stdout) {
-          console.log(`${stdout}`);
-          this._outputChannel.append(`STDOUT: ${stdout}`);
-        }
-        if (stderr) {
-          console.error(`ERROR: ${stderr}`);
-          this._outputChannel.append(`ERROR: ${stderr}`);
-        }
-      });
+      );
 
       // if async, go ahead and run next command
-      if (cfg.isAsync) {
-        this._runCommands(commands, document);
+      if (commandObject.isAsync) {
+        this._runCommands(commandList, document);
       }
     } else {
       // NOTE: This technically just marks the end of commands starting.
@@ -91,9 +95,7 @@ class LaravelHelperExtension {
 
     // NOTE: rootPath seems to be deprecated but seems like the best fallback so that
     // single project workspaces still work. If I come up with a better option, I'll change it.
-    return workspaceFolder
-      ? workspaceFolder.uri.fsPath
-      : vscode.workspace.rootPath;
+    return workspaceFolder?.uri?.fsPath ?? vscode.workspace.rootPath;
   }
 
   public get isEnabled(): boolean {
@@ -106,29 +108,26 @@ class LaravelHelperExtension {
     this.showOutputMessage();
   }
 
-  public get shell(): string {
-    return "";
-    //return this._config.shell "";
-  }
-
   public get autoClearConsole(): boolean {
     return !!this._config.autoClearConsole;
   }
 
-  public get commands(): Array<ICommand> {
-    return [this.getFacadeCommand(), this.getModelCommand()];
+  public get allCommands(): Array<ICommand> {
+    return [this._getFacadeCommand(), this._getModelCommand()];
   }
 
-  public getFacadeCommand(): ICommand {
+  private _getFacadeCommand(): ICommand {
     return {
+      isEnabled: this._config.isFacade,
       cmd: "php artisan ide-helper:generate",
       isAsync: false,
       match: "app",
     };
   }
 
-  public getModelCommand(): ICommand {
+  private _getModelCommand(): ICommand {
     return {
+      isEnabled: this._config.isModel,
       cmd: "php artisan ide-helper:models -n",
       isAsync: false,
       match: "app(\\/models)?\\/(\\w|_)+.php$",
@@ -144,6 +143,12 @@ class LaravelHelperExtension {
     this._outputChannel.appendLine(newMessage);
   }
 
+  private _consoleAutoClear() {
+    if (this.autoClearConsole) {
+      this._outputChannel.clear();
+    }
+  }
+
   /**
    * Show message in status bar and output channel.
    * Return a disposable to remove status bar message.
@@ -153,93 +158,60 @@ class LaravelHelperExtension {
     return vscode.window.setStatusBarMessage(message);
   }
 
-  /* public runHelper() {
-    this._runCommands(
-      this.commands.map((commandObject) => ({
-        cmd: commandObject.cmd,
-        isAsync: !!commandObject.isAsync,
-      }))
-    );
-  } */
-
   public onFileSave(document: vscode.TextDocument): void {
-    if (this.autoClearConsole) {
-      this._outputChannel.clear();
-    }
+    this._consoleAutoClear();
 
     if (!this.isEnabled) {
       this.showOutputMessage();
       return;
     }
 
-    const parsedPath = document.fileName.replace(/\\/g, "/");
+    const filePath = new FilePath(document.fileName);
 
-    const match = (pattern: string) =>
-      pattern &&
-      pattern.length > 0 &&
-      new RegExp(pattern, "i").test(parsedPath);
-
-    const commandConfigs = this.commands.filter((cfg) => {
-      const matchPattern = cfg.match || ".*?";
-      const negatePattern = cfg.notMatch || "";
-
-      // if no match pattern was provided, or if match pattern succeeds
-      const isMatch = matchPattern.length === 0 || match(matchPattern);
-
-      // negation has to be explicitly provided
-      const isNegate = negatePattern.length > 0 && match(negatePattern);
+    const commands = this.allCommands.filter((cfg) => {
+      if (!cfg.isEnabled) return false;
 
       // negation wins over match
-      return !isNegate && isMatch;
+      return !filePath.isNeggate(cfg.notMatch) && filePath.isMatch(cfg.match);
     });
 
-    if (commandConfigs.length === 0) {
+    if (commands.length === 0) {
       return;
     }
 
-    // build our commands by replacing parameters with values
-    const commands: Array<ICommand> = [];
-    for (const cfg of commandConfigs) {
-      let cmdStr = cfg.cmd;
+    this._runCommands(commands, document);
+  }
 
-      const extName = path.extname(document.fileName);
-      const workspaceFolderPath =
-        this._getWorkspaceFolderPath(document.uri) ?? "";
-      const relativeFile = path.relative(
-        workspaceFolderPath,
-        document.uri.fsPath
-      );
+  /**
+   * Runs Facade helper generator command
+   */
+  public runFacadeGenerator(document: vscode.TextDocument) {
+    this._consoleAutoClear();
 
-      cmdStr = cmdStr.replace(/\${file}/g, `${document.fileName}`);
+    const commandList = [this._getFacadeCommand()];
 
-      // DEPRECATED: workspaceFolder is more inline with vscode variables,
-      // but leaving old version in place for any users already using it.
-      cmdStr = cmdStr.replace(/\${workspaceRoot}/g, workspaceFolderPath);
-
-      cmdStr = cmdStr.replace(/\${workspaceFolder}/g, workspaceFolderPath);
-      cmdStr = cmdStr.replace(
-        /\${fileBasename}/g,
-        path.basename(document.fileName)
-      );
-      cmdStr = cmdStr.replace(
-        /\${fileDirname}/g,
-        path.dirname(document.fileName)
-      );
-      cmdStr = cmdStr.replace(/\${fileExtname}/g, extName);
-      cmdStr = cmdStr.replace(
-        /\${fileBasenameNoExt}/g,
-        path.basename(document.fileName, extName)
-      );
-      cmdStr = cmdStr.replace(/\${relativeFile}/g, relativeFile);
-      cmdStr = cmdStr.replace(/\${cwd}/g, process.cwd());
-
-      commands.push({
-        cmd: cmdStr,
-        isAsync: !!cfg.isAsync,
-      });
+    if (!this.isEnabled) {
+      this.showOutputMessage();
+      return;
     }
 
-    this._runCommands(commands, document);
+    this._runCommands(commandList, document);
+  }
+
+  /**
+   * Runs Model helper generator command
+   */
+  public runModelGenerator(document: vscode.TextDocument) {
+    this._consoleAutoClear();
+
+    const commandList = [this._getModelCommand()];
+
+    if (!this.isEnabled) {
+      this.showOutputMessage();
+      return;
+    }
+
+    this._runCommands(commandList, document);
   }
 }
 
