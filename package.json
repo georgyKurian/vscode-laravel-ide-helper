@@ -20,8 +20,16 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.laravelHelperGenerate",
-				"title": "Laravel Helper: Generate"
+				"command": "extension.laraveleGenerateAll",
+				"title": "Laravel Helper: Facade Helper"
+			},
+			{
+				"command": "extension.laravelFacadeGenerate",
+				"title": "Laravel Helper: Facade Helper"
+			},
+			{
+				"command": "extension.laravelModelGenerate",
+				"title": "Laravel Helper: Model Generate"
 			}
 		],
 		"configuration": {
