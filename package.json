@@ -4,6 +4,7 @@
 	"description": "Plugin to run Laravel Ide helper commands for better code suggestion",
 	"version": "0.0.1",
 	"publisher": "georgyKurian",
+	"icon" : "https://raw.githubusercontent.com/georgyKurian/vscode-laravel-ide-helper/main/assets/images/icon.jpg",
 	"repository": "https://github.com/georgyKurian/vscode-laravel-ide-helper",
 	"engines": {
 		"vscode": "^1.32.0"
