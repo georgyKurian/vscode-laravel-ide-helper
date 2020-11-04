@@ -25,7 +25,7 @@ This plugin helps generating helper files for better code suggestion for laravel
 2. Save any .php file to generate `facade helper` files
 3. Save any modal file to generate `model helper` files
 
-> *Note: Need a working database connection for properly generating `model helper` files*
+> :warning: Need a working database connection for properly generating `model helper` files
 
 
 
