@@ -1,16 +1,33 @@
-# Hello World Test Sample
+# Laravel Ide Helper (vs code)
 
-This is the Hello World example with integration tests setup.
+Runs [laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) commands in vs code.
 
-You can find the accompanying documentation at https://code.visualstudio.com/api/working-with-extensions/testing-extension.
+This plugin helps generating helper files for better code suggestion for laravel.
+
+## Features
+
+- Improved Laravel code suggestion of `facades`.
+- Improved Laravel code suggestion of `models`.
+- Improved Laravel code suggestion of `macros`.
+
 
 ## Demo
 
 ![demo](demo.gif)
 
-## Running the Sample
+## Usage
 
-- Run `npm install` in terminal to install dependencies
-- Run the `Run Extension Tests` target in the Debug View. This will:
-	- Start a task `npm: watch` to compile the code
-	- Run the extension integration test in a new VS Code window
+1. Install composer [laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) package to the workspace
+
+	``` bash
+	composer require --dev barryvdh/laravel-ide-helper
+	```
+2. Save any .php file to generate `facade helper` files
+3. Save any modal file to generate `model helper` files
+<br/>
+<br/>
+> *Note: Need a working database connection for properly generating `model helper` files*
+
+
+
+
