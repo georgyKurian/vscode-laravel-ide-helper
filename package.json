@@ -4,8 +4,11 @@
 	"description": "Plugin to run Laravel Ide helper commands for better code suggestion",
 	"version": "0.0.1",
 	"publisher": "georgyKurian",
-	"icon" : "https://raw.githubusercontent.com/georgyKurian/vscode-laravel-ide-helper/main/assets/images/icon.jpg",
+	"license": "SEE LICENSE IN LICENSE.txt",
+	"icon": "https://raw.githubusercontent.com/georgyKurian/vscode-laravel-ide-helper/main/assets/images/icon.jpg",
 	"repository": "https://github.com/georgyKurian/vscode-laravel-ide-helper",
+	"bugs": "https://github.com/georgyKurian/vscode-laravel-ide-helper/issues",
+	"homepage": "https://github.com/georgyKurian/vscode-laravel-ide-helper/blob/main/README.md",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -13,6 +16,10 @@
 		"Programming Languages",
 		"Linters"
 	],
+	"galleryBanner": {
+		"color": "#C80000",
+		"theme": "dark"
+	},
 	"activationEvents": [
 		"onCommand:extension.laravelHelperGenerate",
 		"workspaceContains:**/composer.json"
@@ -34,17 +41,17 @@
 			}
 		],
 		"configuration": {
-			"title" : "Laravel Helper",
+			"title": "Laravel Helper",
 			"properties": {
 				"helper.facades": {
 					"type": "boolean",
 					"default": true,
-				  	"description": "Generates PHPDoc for Laravel Facades"
+					"description": "Generates PHPDoc for Laravel Facades"
 				},
 				"helper.models": {
 					"type": "boolean",
 					"default": true,
-				  	"description": "Generates PHPDoc for Models"
+					"description": "Generates PHPDoc for Models"
 				}
 			}
 		}
