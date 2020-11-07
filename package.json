@@ -2,13 +2,13 @@
 	"name": "laravel-ide-helper",
 	"displayName": "Laravel Ide Helper",
 	"description": "Plugin to run Laravel Ide helper commands for better code suggestion",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "georgyKurian",
 	"license": "SEE LICENSE IN LICENSE.txt",
 	"icon": "assets/images/icon.jpg",
 	"repository": {
 		"type": "git",
-		"url" : "https://github.com/georgyKurian/vscode-laravel-ide-helper"
+		"url": "https://github.com/georgyKurian/vscode-laravel-ide-helper"
 	},
 	"bugs": {
 		"url": "https://github.com/georgyKurian/vscode-laravel-ide-helper/issues"
@@ -21,9 +21,16 @@
 		"Programming Languages",
 		"Linters"
 	],
+	"keywords": [
+		"Laravel",
+		"Artisan",
+		"intellisense",
+		"php",
+		"ide"
+	],
 	"galleryBanner": {
-		"color": "#C80000",
-		"theme": "dark"
+		"color": "#EFF1F3",
+		"theme": "light"
 	},
 	"activationEvents": [
 		"onCommand:laravelIdeHelper.laravelHelperGenerate",
