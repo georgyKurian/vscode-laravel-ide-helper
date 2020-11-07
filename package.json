@@ -15,7 +15,7 @@
 	},
 	"homepage": "https://github.com/georgyKurian/vscode-laravel-ide-helper/blob/main/README.md",
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.51.0"
 	},
 	"categories": [
 		"Programming Languages",
