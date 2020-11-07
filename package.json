@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "georgyKurian",
 	"license": "SEE LICENSE IN LICENSE.txt",
-	"icon": "https://raw.githubusercontent.com/georgyKurian/vscode-laravel-ide-helper/main/assets/images/icon.jpg",
+	"icon": "assets/images/icon.jpg",
 	"repository": {
 		"type": "git",
 		"url" : "https://github.com/georgyKurian/vscode-laravel-ide-helper"
