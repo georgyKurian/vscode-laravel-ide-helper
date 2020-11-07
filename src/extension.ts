@@ -3,6 +3,8 @@
 import * as vscode from "vscode";
 import LaravelHelperExtension from "./LaravelHelperExtension";
 
+const extensionId = "laravelIdeHelper";
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -13,31 +15,44 @@ export function activate(context: vscode.ExtensionContext) {
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
   context.subscriptions.push(
-    vscode.commands.registerCommand("extension.laravelFacadeGenerate", () => {
-      const activeEditor = vscode.window.activeTextEditor;
-      if (!activeEditor) {
-        return;
-      }
-
-      extension.runFacadeGenerator(activeEditor.document);
-
-      // Display a message box to the user
+    vscode.commands.registerCommand(`${extensionId}.laravelGenerateAll`, () => {
+      // To be implemented
       vscode.window.showInformationMessage("Generating Helper files!");
     })
   );
-  
+
   context.subscriptions.push(
-    vscode.commands.registerCommand("extension.laravelModelGenerate", () => {
-      const activeEditor = vscode.window.activeTextEditor;
-      if (!activeEditor) {
-        return;
+    vscode.commands.registerCommand(
+      `${extensionId}.laravelFacadeGenerate`,
+      () => {
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+          return;
+        }
+
+        extension.runFacadeGenerator(activeEditor.document);
+
+        // Display a message box to the user
+        vscode.window.showInformationMessage("Generating Helper files!");
       }
+    )
+  );
 
-      extension.runModelGenerator(activeEditor.document);
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      `${extensionId}.laravelModelGenerate`,
+      () => {
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+          return;
+        }
 
-      // Display a message box to the user
-      vscode.window.showInformationMessage("Generating Helper files!");
-    })
+        extension.runModelGenerator(activeEditor.document);
+
+        // Display a message box to the user
+        vscode.window.showInformationMessage("Generating Helper files!");
+      }
+    )
   );
 
   context.subscriptions.push(
