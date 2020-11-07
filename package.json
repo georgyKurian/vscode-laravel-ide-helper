@@ -6,8 +6,13 @@
 	"publisher": "georgyKurian",
 	"license": "SEE LICENSE IN LICENSE.txt",
 	"icon": "https://raw.githubusercontent.com/georgyKurian/vscode-laravel-ide-helper/main/assets/images/icon.jpg",
-	"repository": "https://github.com/georgyKurian/vscode-laravel-ide-helper",
-	"bugs": "https://github.com/georgyKurian/vscode-laravel-ide-helper/issues",
+	"repository": {
+		"type": "git",
+		"url" : "https://github.com/georgyKurian/vscode-laravel-ide-helper"
+	},
+	"bugs": {
+		"url": "https://github.com/georgyKurian/vscode-laravel-ide-helper/issues"
+	},
 	"homepage": "https://github.com/georgyKurian/vscode-laravel-ide-helper/blob/main/README.md",
 	"engines": {
 		"vscode": "^1.32.0"
@@ -21,22 +26,22 @@
 		"theme": "dark"
 	},
 	"activationEvents": [
-		"onCommand:extension.laravelHelperGenerate",
+		"onCommand:laravelIdeHelper.laravelHelperGenerate",
 		"workspaceContains:**/composer.json"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.laraveleGenerateAll",
+				"command": "laravelIdeHelper.laravelGenerateAll",
 				"title": "Laravel Helper: Facade Helper"
 			},
 			{
-				"command": "extension.laravelFacadeGenerate",
+				"command": "laravelIdeHelper.laravelFacadeGenerate",
 				"title": "Laravel Helper: Facade Helper"
 			},
 			{
-				"command": "extension.laravelModelGenerate",
+				"command": "laravelIdeHelper.laravelModelGenerate",
 				"title": "Laravel Helper: Model Generate"
 			}
 		],
