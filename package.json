@@ -2,7 +2,7 @@
 	"name": "laravel-ide-helper",
 	"displayName": "Laravel Ide Helper",
 	"description": "Plugin to run Laravel Ide helper commands for better code suggestion",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"publisher": "georgyKurian",
 	"license": "SEE LICENSE IN LICENSE.txt",
 	"icon": "assets/images/icon.jpg",
