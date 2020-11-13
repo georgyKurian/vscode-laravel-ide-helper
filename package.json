@@ -73,7 +73,7 @@
 		"compile": "tsc -p ./",
 		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
+		"pretest": "(cd ./data/test/test-workspace/ && composer install) || npm run compile",
 		"test": "node ./out/test/runTest.js",
 		"deploy": "vsce publish"
 	},

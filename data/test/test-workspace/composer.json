@@ -1,0 +1,13 @@
+{
+    "name": "georgi/test",
+    "authors": [
+        {
+            "name": "Georgi Varghese Kurian",
+            "email": "georgy.v.k@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.8"
+    }
+}
