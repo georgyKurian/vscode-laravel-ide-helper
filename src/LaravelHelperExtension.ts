@@ -174,6 +174,22 @@ class LaravelHelperExtension {
   /**
    * Runs Facade helper generator command
    */
+  public runAllCommands(document: vscode.TextDocument) {
+    this._consoleAutoClear();
+
+    const commandList = this.allCommands;
+
+    if (!this.isEnabled) {
+      this.showOutputMessage();
+      return;
+    }
+
+    this._runCommands(commandList, document);
+  }
+
+  /**
+   * Runs Facade helper generator command
+   */
   public runFacadeGenerator(document: vscode.TextDocument) {
     this._consoleAutoClear();
 

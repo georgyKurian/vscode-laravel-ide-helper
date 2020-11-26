@@ -33,7 +33,7 @@
 		"theme": "light"
 	},
 	"activationEvents": [
-		"onCommand:laravelIdeHelper.laravelHelperGenerate",
+		"onCommand:laravelIdeHelper.activate",
 		"workspaceContains:**/composer.json"
 	],
 	"main": "./out/extension.js",
@@ -41,15 +41,15 @@
 		"commands": [
 			{
 				"command": "laravelIdeHelper.laravelGenerateAll",
-				"title": "Laravel Helper: Facade Helper"
+				"title": "Laravel Helper: Run All Helper"
 			},
 			{
 				"command": "laravelIdeHelper.laravelFacadeGenerate",
-				"title": "Laravel Helper: Facade Helper"
+				"title": "Laravel Helper: Run Facade Helper"
 			},
 			{
 				"command": "laravelIdeHelper.laravelModelGenerate",
-				"title": "Laravel Helper: Model Generate"
+				"title": "Laravel Helper: Run Model Helper"
 			}
 		],
 		"configuration": {
