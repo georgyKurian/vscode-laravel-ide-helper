@@ -33,7 +33,7 @@
 		"theme": "light"
 	},
 	"activationEvents": [
-		"onCommand:laravelIdeHelper.laravelHelperGenerate",
+		"onCommand:laravelIdeHelper.activate",
 		"workspaceContains:**/composer.json"
 	],
 	"main": "./out/extension.js",
@@ -41,15 +41,15 @@
 		"commands": [
 			{
 				"command": "laravelIdeHelper.laravelGenerateAll",
-				"title": "Laravel Helper: Facade Helper"
+				"title": "Laravel Helper: Run All Helper"
 			},
 			{
 				"command": "laravelIdeHelper.laravelFacadeGenerate",
-				"title": "Laravel Helper: Facade Helper"
+				"title": "Laravel Helper: Run Facade Helper"
 			},
 			{
 				"command": "laravelIdeHelper.laravelModelGenerate",
-				"title": "Laravel Helper: Model Generate"
+				"title": "Laravel Helper: Run Model Helper"
 			}
 		],
 		"configuration": {
@@ -73,7 +73,7 @@
 		"compile": "tsc -p ./",
 		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
+		"pretest": "(cd ./data/test/test-workspace/ && composer install) || npm run compile",
 		"test": "node ./out/test/runTest.js",
 		"deploy": "vsce publish"
 	},

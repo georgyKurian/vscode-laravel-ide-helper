@@ -16,8 +16,12 @@ export function activate(context: vscode.ExtensionContext) {
   // The commandId parameter must match the command field in package.json
   context.subscriptions.push(
     vscode.commands.registerCommand(`${extensionId}.laravelGenerateAll`, () => {
-      // To be implemented
-      vscode.window.showInformationMessage("Generating Helper files!");
+      const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+          return;
+        }
+        extension.runAllCommands(activeEditor.document);
+        vscode.window.showInformationMessage("Generating Helper files!");
     })
   );
 
@@ -29,10 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (!activeEditor) {
           return;
         }
-
         extension.runFacadeGenerator(activeEditor.document);
-
-        // Display a message box to the user
         vscode.window.showInformationMessage("Generating Helper files!");
       }
     )
@@ -46,10 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (!activeEditor) {
           return;
         }
-
         extension.runModelGenerator(activeEditor.document);
-
-        // Display a message box to the user
         vscode.window.showInformationMessage("Generating Helper files!");
       }
     )

@@ -1,20 +1,9 @@
 import * as vscode from "vscode";
 import { exec } from "child_process";
 import FilePath from "./FilePath";
+import { ICommand, IConfig } from "./types";
 
-interface IConfig {
-  isFacade: boolean;
-  isModel: boolean;
-  autoClearConsole: boolean;
-}
 
-interface ICommand {
-  isEnabled: boolean;
-  match?: string;
-  notMatch?: string;
-  cmd: string;
-  isAsync: boolean;
-}
 
 class LaravelHelperExtension {
   private _name = "Laravel Helper";
@@ -180,6 +169,22 @@ class LaravelHelperExtension {
     }
 
     this._runCommands(commands, document);
+  }
+
+  /**
+   * Runs Facade helper generator command
+   */
+  public runAllCommands(document: vscode.TextDocument) {
+    this._consoleAutoClear();
+
+    const commandList = this.allCommands;
+
+    if (!this.isEnabled) {
+      this.showOutputMessage();
+      return;
+    }
+
+    this._runCommands(commandList, document);
   }
 
   /**
