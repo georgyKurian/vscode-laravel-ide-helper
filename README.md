@@ -25,7 +25,15 @@ This plugin helps generating helper files for better code suggestion for laravel
 2. Save any .php file to generate `facade helper` files
 3. Save any modal file to generate `model helper` files
 
-> :warning: Need a working database connection for properly generating `model helper` files
+## Recommended
+- Publish and customize the configuration for laravel-ide-helper using command for better results. 
+	``` bash
+	php artisan vendor:publish --provider="Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider" --tag=config
+	```
+
+
+## Warning :warning:
+- Need a working database connection for properly generating `model helper` files
 
 
 
