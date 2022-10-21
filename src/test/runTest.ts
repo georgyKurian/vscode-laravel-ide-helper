@@ -16,7 +16,7 @@ async function main() {
 
     // Download VS Code, unzip it and run the integration test
     await runTests({
-      version: "1.72.2",
+      version: "1.60.2",
       extensionDevelopmentPath,
       extensionTestsPath,
       launchArgs: [testWorkspace],
