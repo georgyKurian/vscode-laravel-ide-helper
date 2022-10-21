@@ -3,8 +3,6 @@ import { exec } from "child_process";
 import FilePath from "./FilePath";
 import { ICommand, IConfig } from "./types";
 
-
-
 class LaravelHelperExtension {
   private _name = "Laravel Helper";
   private _outputChannel: vscode.OutputChannel;
@@ -19,11 +17,14 @@ class LaravelHelperExtension {
 
   public fetchConfig(): IConfig {
     const config = vscode.workspace.getConfiguration("helper");
-    return {
+
+    const extConfig: IConfig = {
       isFacade: config.get("facades") ?? true,
       isModel: config.get("models") ?? true,
       autoClearConsole: false,
     };
+
+    return extConfig;
   }
 
   public loadConfig(): void {
