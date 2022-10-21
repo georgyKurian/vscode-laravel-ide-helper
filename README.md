@@ -32,7 +32,7 @@ This plugin helps generating helper files for better code suggestion for laravel
 	```
 
 
-## Warning :warning:
+## Warning
 - Need a working database connection for properly generating `model helper` files
 
 
