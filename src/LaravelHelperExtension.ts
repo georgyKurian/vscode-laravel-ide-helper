@@ -19,6 +19,7 @@ class LaravelHelperExtension {
     const config = vscode.workspace.getConfiguration("helper");
 
     const extConfig: IConfig = {
+      executablePath: config.get("executablePath") ?? "php artisan",
       isFacade: config.get("facades") ?? true,
       isModel: config.get("models") ?? true,
       autoClearConsole: false,
@@ -109,7 +110,7 @@ class LaravelHelperExtension {
   private _getFacadeCommand(): ICommand {
     return {
       isEnabled: this._config.isFacade,
-      cmd: "php artisan ide-helper:generate",
+      cmd: `${this._config.executablePath} ide-helper:generate`,
       isAsync: false,
       match: "app",
     };
@@ -118,7 +119,7 @@ class LaravelHelperExtension {
   private _getModelCommand(): ICommand {
     return {
       isEnabled: this._config.isModel,
-      cmd: "php artisan ide-helper:models -n",
+      cmd: `${this._config.executablePath} ide-helper:models -n`,
       isAsync: false,
       match: "app(\\/models)?\\/(\\w|_)+.php$",
     };

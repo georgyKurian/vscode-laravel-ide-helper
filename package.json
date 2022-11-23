@@ -55,6 +55,11 @@
     "configuration": {
       "title": "Laravel Helper",
       "properties": {
+        "helper.executablePath": {
+          "type": "string",
+          "default": "php artisan",
+          "description": "Points to the Artisan executable"
+        },
         "helper.facades": {
           "type": "boolean",
           "default": true,
