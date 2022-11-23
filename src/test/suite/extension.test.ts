@@ -40,6 +40,7 @@ suite("Extension Test Suite", () => {
 
   test("Default configuarion", () => {
     const config = vscode.workspace.getConfiguration("helper");
+    assert.strictEqual(config.get("executablePath"), "php artisan");
     assert.strictEqual(config.get("facades"), true);
     assert.strictEqual(config.get("models"), true);
   });
