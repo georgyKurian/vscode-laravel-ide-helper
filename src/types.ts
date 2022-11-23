@@ -1,4 +1,5 @@
 interface IConfig {
+  executablePath: string;
   isFacade: boolean;
   isModel: boolean;
   autoClearConsole: boolean;
