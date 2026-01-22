@@ -105,13 +105,9 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "compile": "npm run check-types && node esbuild.js && npm run compile-tests",
-    "compile-tests": "tsc -p ./tsconfig.test.json",
-    "check-types": "tsc --noEmit",
-    "watch": "npm-run-all -p watch:*",
-    "watch:esbuild": "node esbuild.js --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "npm run check-types && node esbuild.js --production",
+    "compile": "tsc --noEmit && node esbuild.js && tsc -p ./tsconfig.test.json",
+    "watch": "node esbuild.js --watch",
+    "package": "tsc --noEmit && node esbuild.js --production",
     "lint": "eslint src/",
     "pretest": "(cd ./data/test/test-workspace/ && composer install) && npm run compile",
     "test": "node ./out/test/runTest.js",
@@ -130,7 +126,6 @@
     "eslint": "^9.39.2",
     "glob": "^13.0.0",
     "mocha": "^11.7.5",
-    "npm-run-all": "^4.1.5",
     "typescript": "^5.9.3"
   }
 }
