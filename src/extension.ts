@@ -62,6 +62,14 @@ export function activate(context: vscode.ExtensionContext): void {
     )
   );
 
+  // Command to clear caches (useful for troubleshooting)
+  context.subscriptions.push(
+    vscode.commands.registerCommand(`${extensionId}.clearCaches`, () => {
+      extension.clearCaches();
+      vscode.window.showInformationMessage("Laravel Helper caches cleared.");
+    })
+  );
+
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration(() => {
       const disposeStatus = extension.showStatusMessage("Reloading config.");
@@ -78,5 +86,8 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate(): void {
-  // Clean up resources if needed
+  // Clean up debounce timer
+  if (extension) {
+    extension.clearDebounce();
+  }
 }

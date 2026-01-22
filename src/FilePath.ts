@@ -1,5 +1,5 @@
 class FilePath {
-  private _path: string;
+  private readonly _path: string;
 
   constructor(filePath: string) {
     this._path = this._parse(filePath);

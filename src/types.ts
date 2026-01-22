@@ -4,6 +4,8 @@ interface IConfig {
   autoClearConsole: boolean;
   phpPath: string;
   runOnSave: boolean;
+  debounceDelay: number;
+  parallelExecution: boolean;
 }
 
 interface ICommand {
@@ -14,4 +16,11 @@ interface ICommand {
   isAsync: boolean;
 }
 
-export { IConfig, ICommand };
+interface ICommandResult {
+  success: boolean;
+  output: string;
+  error?: string;
+  command: ICommand;
+}
+
+export { IConfig, ICommand, ICommandResult };
