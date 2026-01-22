@@ -1,0 +1,4 @@
+#!/usr/bin/env php
+<?php
+// Minimal artisan file for testing purposes
+// This file is required for the Laravel IDE Helper extension to activate

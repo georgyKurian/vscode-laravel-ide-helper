@@ -1,14 +1,12 @@
-import * as path from "path";
-
 class FilePath {
-  private _path;
+  private readonly _path: string;
 
-  constructor(path: string) {
-    this._path = this._parse(path);
+  constructor(filePath: string) {
+    this._path = this._parse(filePath);
   }
 
-  private _parse(path: string): string {
-    return path.replace(/\\/g, "/");
+  private _parse(filePath: string): string {
+    return filePath.replace(/\\/g, "/");
   }
 
   private _matchFilePath(pattern: string, parsedPath: string): boolean {
@@ -19,12 +17,12 @@ class FilePath {
     );
   }
 
-  public isMatch(pattern = ".*?") {
+  public isMatch(pattern = ".*?"): boolean {
     // if no match pattern was provided, or if match pattern succeeds
     return pattern.length === 0 || this._matchFilePath(pattern, this._path);
   }
 
-  public isNeggate(pattern = "") {
+  public isNegate(pattern = ""): boolean {
     // negation has to be explicitly provided
     return pattern.length > 0 && this._matchFilePath(pattern, this._path);
   }

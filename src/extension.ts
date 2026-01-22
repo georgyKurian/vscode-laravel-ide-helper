@@ -1,40 +1,35 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import LaravelHelperExtension from "./LaravelHelperExtension";
 
 const extensionId = "laravelIdeHelper";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  const extension = new LaravelHelperExtension(context);
+let extension: LaravelHelperExtension;
+
+export function activate(context: vscode.ExtensionContext): void {
+  extension = new LaravelHelperExtension(context);
   extension.showOutputMessage();
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
   context.subscriptions.push(
-    vscode.commands.registerCommand(`${extensionId}.laravelGenerateAll`, () => {
+    vscode.commands.registerCommand(`${extensionId}.laravelGenerateAll`, async () => {
       const activeEditor = vscode.window.activeTextEditor;
-        if (!activeEditor) {
-          return;
-        }
-        extension.runAllCommands(activeEditor.document);
-        vscode.window.showInformationMessage("Generating Helper files!");
+      if (!activeEditor) {
+        vscode.window.showWarningMessage("No active editor found.");
+        return;
+      }
+      await extension.runAllCommands(activeEditor.document);
     })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       `${extensionId}.laravelFacadeGenerate`,
-      () => {
+      async () => {
         const activeEditor = vscode.window.activeTextEditor;
         if (!activeEditor) {
+          vscode.window.showWarningMessage("No active editor found.");
           return;
         }
-        extension.runFacadeGenerator(activeEditor.document);
-        vscode.window.showInformationMessage("Generating Helper files!");
+        await extension.runFacadeGenerator(activeEditor.document);
       }
     )
   );
@@ -42,15 +37,37 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       `${extensionId}.laravelModelGenerate`,
-      () => {
+      async () => {
         const activeEditor = vscode.window.activeTextEditor;
         if (!activeEditor) {
+          vscode.window.showWarningMessage("No active editor found.");
           return;
         }
-        extension.runModelGenerator(activeEditor.document);
-        vscode.window.showInformationMessage("Generating Helper files!");
+        await extension.runModelGenerator(activeEditor.document);
       }
     )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      `${extensionId}.laravelMetaGenerate`,
+      async () => {
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+          vscode.window.showWarningMessage("No active editor found.");
+          return;
+        }
+        await extension.runMetaGenerator(activeEditor.document);
+      }
+    )
+  );
+
+  // Command to clear caches (useful for troubleshooting)
+  context.subscriptions.push(
+    vscode.commands.registerCommand(`${extensionId}.clearCaches`, () => {
+      extension.clearCaches();
+      vscode.window.showInformationMessage("Laravel Helper caches cleared.");
+    })
   );
 
   context.subscriptions.push(
@@ -62,8 +79,15 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
-      extension.onFileSave(document);
+    vscode.workspace.onDidSaveTextDocument(async (document: vscode.TextDocument) => {
+      await extension.onFileSave(document);
     })
   );
+}
+
+export function deactivate(): void {
+  // Clean up debounce timer
+  if (extension) {
+    extension.clearDebounce();
+  }
 }

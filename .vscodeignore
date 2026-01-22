@@ -1,5 +1,35 @@
+# Source files (bundled by esbuild)
+src/**
+*.ts
+
+# Config files
 .gitignore
-./src
-./data
-./azure-pipelines.yml
-./.github
+.eslintrc*
+eslint.config.*
+tsconfig.json
+esbuild.js
+
+# Test files
+**/*.test.ts
+**/test/**
+.vscode-test/**
+
+# Data/fixtures
+data/**
+
+# CI/CD
+azure-pipelines.yml
+.github/**
+
+# Development
+node_modules/**
+.vscode/**
+
+# Build artifacts (keep only dist/)
+out/**
+
+# Other
+*.map
+*.md
+!README.md
+.prettierrc*
