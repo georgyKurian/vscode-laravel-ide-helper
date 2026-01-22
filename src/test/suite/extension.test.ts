@@ -1,7 +1,4 @@
 import * as assert from "assert";
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
 import * as vscode from "vscode";
 
 suite("Extension Test Suite", () => {
@@ -25,22 +22,24 @@ suite("Extension Test Suite", () => {
       `${extensionPrefix}.laravelFacadeGenerate`,
       `${extensionPrefix}.laravelGenerateAll`,
       `${extensionPrefix}.laravelModelGenerate`,
+      `${extensionPrefix}.laravelMetaGenerate`,
     ];
     const commands = await vscode.commands.getCommands();
-    const regExp = new RegExp(/laravelFacadeGenerate/i);
-    // console.log("---" + commands.find((cmd) => cmd === cmds[0]));
     extensionCommands.forEach((extensionCommand) =>
       assert.strictEqual(
         commands.includes(extensionCommand),
         true,
-        `Couldnt find ${extensionCommand}`
+        `Couldn't find ${extensionCommand}`
       )
     );
   });
 
-  test("Default configuarion", () => {
+  test("Default configuration", () => {
     const config = vscode.workspace.getConfiguration("helper");
     assert.strictEqual(config.get("facades"), true);
     assert.strictEqual(config.get("models"), true);
+    assert.strictEqual(config.get("autoClearConsole"), false);
+    assert.strictEqual(config.get("phpPath"), "php");
+    assert.strictEqual(config.get("runOnSave"), true);
   });
 });

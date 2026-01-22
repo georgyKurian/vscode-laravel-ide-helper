@@ -2,6 +2,8 @@ interface IConfig {
   isFacade: boolean;
   isModel: boolean;
   autoClearConsole: boolean;
+  phpPath: string;
+  runOnSave: boolean;
 }
 
 interface ICommand {
@@ -12,4 +14,4 @@ interface ICommand {
   isAsync: boolean;
 }
 
-export { IConfig, ICommand};
+export { IConfig, ICommand };
