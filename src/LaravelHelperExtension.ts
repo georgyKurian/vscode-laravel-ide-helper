@@ -308,7 +308,7 @@ class LaravelHelperExtension {
       isEnabled: this._config.isFacade,
       cmd: "php artisan ide-helper:generate",
       isAsync: false,
-      match: "app",
+      match: "\\/app\\/.*\\.php$",
     };
   }
 
@@ -317,7 +317,7 @@ class LaravelHelperExtension {
       isEnabled: this._config.isModel,
       cmd: "php artisan ide-helper:models -n",
       isAsync: false,
-      match: "app(\\/models)?\\/(\\w|_)+.php$",
+      match: "\\/app\\/(models\\/)?(\\w|_)+\\.php$",
     };
   }
 

@@ -19,7 +19,7 @@ suite("FilePath Test Suite", () => {
     });
 
     test("should match model files in app/Models directory", () => {
-      const modelPattern = "app(\\/models)?\\/(\\w|_)+.php$";
+      const modelPattern = "\\/app\\/(models\\/)?(\\w|_)+\\.php$";
       
       const userModel = new FilePath("/project/app/Models/User.php");
       assert.strictEqual(userModel.isMatch(modelPattern), true);
@@ -29,15 +29,47 @@ suite("FilePath Test Suite", () => {
     });
 
     test("should match model files in app directory (legacy location)", () => {
-      const modelPattern = "app(\\/models)?\\/(\\w|_)+.php$";
+      const modelPattern = "\\/app\\/(models\\/)?(\\w|_)+\\.php$";
       const legacyModel = new FilePath("/project/app/User.php");
       assert.strictEqual(legacyModel.isMatch(modelPattern), true);
     });
 
     test("should not match non-PHP files", () => {
-      const modelPattern = "app(\\/models)?\\/(\\w|_)+.php$";
+      const modelPattern = "\\/app\\/(models\\/)?(\\w|_)+\\.php$";
       const jsFile = new FilePath("/project/app/Models/User.js");
       assert.strictEqual(jsFile.isMatch(modelPattern), false);
+    });
+
+    test("should handle Laravel facade pattern correctly", () => {
+      const facadePattern = "\\/app\\/.*\\.php$";
+
+      // Should match any PHP file in app/
+      assert.strictEqual(new FilePath("/project/app/Http/Controllers/UserController.php").isMatch(facadePattern), true);
+      assert.strictEqual(new FilePath("/project/app/Models/User.php").isMatch(facadePattern), true);
+      
+      // Should NOT match non-PHP files
+      assert.strictEqual(new FilePath("/project/app/Http/Controllers/UserController.js").isMatch(facadePattern), false);
+
+      // Should NOT match PHP files outside app/
+      assert.strictEqual(new FilePath("/project/resources/js/components/Appointment.php").isMatch(facadePattern), false);
+    });
+
+    test("should not match files inside resources/js/components or pages", () => {
+      const facadePattern = "\\/app\\/.*\\.php$";
+      const modelPattern = "\\/app\\/(models\\/)?(\\w|_)+\\.php$";
+
+      const vueComponent = new FilePath("/project/resources/js/components/App.vue");
+      const jsComponent = new FilePath("/project/resources/js/components/Appointment.js");
+      const vuePage = new FilePath("/project/resources/js/pages/SomePage.vue");
+
+      assert.strictEqual(vueComponent.isMatch(facadePattern), false);
+      assert.strictEqual(vueComponent.isMatch(modelPattern), false);
+
+      assert.strictEqual(jsComponent.isMatch(facadePattern), false);
+      assert.strictEqual(jsComponent.isMatch(modelPattern), false);
+
+      assert.strictEqual(vuePage.isMatch(facadePattern), false);
+      assert.strictEqual(vuePage.isMatch(modelPattern), false);
     });
 
     test("should handle empty pattern", () => {
